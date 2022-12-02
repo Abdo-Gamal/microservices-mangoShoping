@@ -2,6 +2,8 @@ using Mango.Web.Services.IServices;
 using Mango.Web.Services;
 using Mango.Web;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Mango.web.Services.IServices;
+using Mango.web.Services;
 
 namespace Mango.web
 {
@@ -15,10 +17,12 @@ namespace Mango.web
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddHttpClient<IProductService, ProductService>();
+            builder.Services.AddHttpClient<ICartService, CartService>();
             SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
             SD.ShoppingCartAPIBase = builder.Configuration["ServiceUrls:ShopingCartAPI"];
 
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICartService, CartService>();
 
             builder.Services.AddAuthentication(options =>
             {
