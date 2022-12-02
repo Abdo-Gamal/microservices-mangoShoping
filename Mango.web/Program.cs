@@ -4,6 +4,7 @@ using Mango.Web;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Mango.web.Services.IServices;
 using Mango.web.Services;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Mango.web
 {
@@ -37,8 +38,8 @@ namespace Mango.web
                     options.ClientId = "mango";
                     options.ClientSecret = "secret";
                     options.ResponseType = "code";
-                    //options.ClaimActions.MapJsonKey("role", "role", "role");
-                    //options.ClaimActions.MapJsonKey("sub", "sub", "sub");
+                    options.ClaimActions.MapJsonKey("role", "role", "role");
+                    options.ClaimActions.MapJsonKey("sub", "sub", "sub");
                     options.TokenValidationParameters.NameClaimType = "name";
                     options.TokenValidationParameters.RoleClaimType = "role";
                     options.Scope.Add("mango");
