@@ -72,5 +72,23 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
             return _responseDto;
         }
+        [HttpPost("RemoveCart")]
+        public async Task<object> RemoveCart([FromBody]int  CartId)
+        {
+            try
+            {
+                bool  isSuccess = await _cartRepository.RemoveFromCart(CartId);
+                _responseDto.Result = isSuccess;
+            }
+            catch (Exception e)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.ErrorMessages = new List<string>()
+                {
+                    e.ToString()
+                };
+            }
+            return _responseDto;
+        }
     }
 }
