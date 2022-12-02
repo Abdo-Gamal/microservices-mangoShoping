@@ -23,7 +23,18 @@ namespace Mango.Services.ShoppingCartAPI.Repository
 
         public async Task<bool> ClearCart(string userId)
         {
-            throw new NotImplementedException();
+            var CartHeaderFromDb = await _db.CartHeaders.FirstOrDefaultAsync(
+                u => u.UserId == userId);
+
+            if (CartHeaderFromDb != null)
+            {
+                _db.CartDetails.RemoveRange(_db.CartDetails.Where(
+                    u=>u.CartHeaderId==CartHeaderFromDb.CartHeaderId));
+                _db.CartHeaders.Remove(CartHeaderFromDb);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
         public async Task<CartDto> CreateUpdateCart(CartDto cartDto)
