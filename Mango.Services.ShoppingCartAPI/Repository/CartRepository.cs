@@ -117,7 +117,26 @@ namespace Mango.Services.ShoppingCartAPI.Repository
 
         public async Task<bool> RemoveFromCart(int cartDetailsId)
         {
-            throw new NotImplementedException();
-        }
+            try {
+                CartDetails cartDetails = await _db.CartDetails.
+                    FirstOrDefaultAsync(u => u.CartDetailsId == cartDetailsId);
+
+                int TotalCountOfCartItem = _db.CartDetails.
+                    Where(u => u.CartHeaderId == cartDetails.CartHeaderId).Count();
+                _db.CartDetails.Remove(cartDetails);
+                if (TotalCountOfCartItem == 1)
+                {
+                    var carHeaderToRemove = await _db.CartHeaders.
+                        FirstOrDefaultAsync(_ => _.CartHeaderId == cartDetails.CartHeaderId);
+                    _db.CartHeaders.Remove(carHeaderToRemove);
+                }
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+         }
     }
 }
