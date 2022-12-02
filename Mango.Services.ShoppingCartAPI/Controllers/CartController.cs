@@ -53,5 +53,24 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
             return _responseDto;
         }
+
+        [HttpGet("UpdateCart")]
+        public async Task<object> UpdateCart(CartDto cartDto)
+        {
+            try
+            {
+                CartDto cartDt = await _cartRepository.CreateUpdateCart(cartDto);
+                _responseDto.Result = cartDt;
+            }
+            catch (Exception e)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.ErrorMessages = new List<string>()
+                {
+                    e.ToString()
+                };
+            }
+            return _responseDto;
+        }
     }
 }
