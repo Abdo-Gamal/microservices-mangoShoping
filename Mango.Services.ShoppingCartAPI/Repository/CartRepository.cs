@@ -3,6 +3,7 @@ using Mango.Services.ShoppingCartAPI.DbContexts;
 using Mango.Services.ShoppingCartAPI.Models;
 using Mango.Services.ShoppingCartAPI.Models.Dto;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Mango.Services.ShoppingCartAPI.Repository
 {
@@ -97,7 +98,16 @@ namespace Mango.Services.ShoppingCartAPI.Repository
 
         public async Task<CartDto> GetCartByUserId(string userId)
         {
-            throw new NotImplementedException();
+            Cart cart = new()
+            {
+                CartHeader =await  _db.CartHeaders.FirstOrDefaultAsync(
+                u => u.UserId == userId)
+            };
+            //include to put produt objet in cart  
+            cart.CartDetails =_db.CartDetails.
+                Where(u=>u.CartHeaderId==cart.CartHeader.CartHeaderId).Include(u=>u.Product);
+
+            return _mapper.Map<CartDto>(cart);
         }
 
         public async Task<bool> RemoveCoupon(string userId)
