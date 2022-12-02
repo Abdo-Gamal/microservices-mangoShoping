@@ -1,12 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Mango.Services.ShoppingCartAPI.Models.Dto;
+using Mango.Services.ShoppingCartAPI.Repository;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace Mango.Services.ShoppingCartAPI.Controllers
 {
+    [ApiController]
+    [Route("api/cart")]
     public class CartController : Controller
     {
-        public IActionResult Index()
+        private readonly ICartRepository _cartRepository;
+        protected  ResponseDto _responseDto;
+        public  CartController(ICartRepository cartRepository)
         {
-            return View();
+            _cartRepository = cartRepository;
+            _responseDto = new ResponseDto();
+        }
+        [HttpGet("GetCart/{userId}")]
+        public async Task<object> GetCart(string userId)
+        {
+            try
+            {
+                CartDto cartDto =await _cartRepository.GetCartByUserId(userId);
+                _responseDto.Result = cartDto;
+            }
+            catch (Exception e)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.ErrorMessages = new List<string>()
+                {
+                    e.ToString()
+                };
+            }
+            return _responseDto;
         }
     }
 }
