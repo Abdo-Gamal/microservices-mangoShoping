@@ -1,15 +1,19 @@
 ﻿using Mango.web.Models;
+using Mango.Web.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Mango.web.Services.IServices
+namespace Mango.Web.Services.IServices
 {
     public interface ICartService
     {
-        Task<T> GetCartByUserIdAsnyc<T>(string userId,string token=null);
+        Task<T> GetCartByUserIdAsnyc<T>(string userId, string token = null);
         Task<T> AddToCartAsync<T>(CartDto cartDto, string token = null);
+        Task<T> UpdateCartAsync<T>(CartDto cartDto, string token = null);
+        Task<T> RemoveFromCartAsync<T>(int cartId, string token = null);
 
-        Task<T> UpdateCartAsnyc<T>(CartDto cartDto, string token = null);
-        //I mean by cartId  is cartDetailsId
-        Task<T> RemoveFromCartAsnyc<T>(int CartId, string token = null);
 
     }
 }

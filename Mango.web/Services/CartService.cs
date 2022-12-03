@@ -1,12 +1,15 @@
 ﻿using Mango.web.Models;
-using Mango.web.Services.IServices;
-using Mango.Web;
 using Mango.Web.Models;
-using Mango.Web.Services;
+using Mango.Web.Services.IServices;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-namespace Mango.web.Services
+namespace Mango.Web.Services
 {
-    public class CartService : BaseService, ICartService
+    public class CartService : BaseService,ICartService
     {
         private readonly IHttpClientFactory _clientFactory;
 
@@ -25,28 +28,33 @@ namespace Mango.web.Services
             });
         }
 
+
+   
+
         public async Task<T> GetCartByUserIdAsnyc<T>(string userId, string token = null)
         {
             return await this.SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = SD.ShoppingCartAPIBase + "/api/cart/GetCart" + userId,
+                Url = SD.ShoppingCartAPIBase + "/api/cart/GetCart/" + userId,
                 AccessToken = token
             });
         }
 
-        public async Task<T> RemoveFromCartAsnyc<T>(int CartId, string token = null)
+      
+
+        public async Task<T> RemoveFromCartAsync<T>(int cartId, string token = null)
         {
             return await this.SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.POST,
-                Data = CartId,
+                Data = cartId,
                 Url = SD.ShoppingCartAPIBase + "/api/cart/RemoveCart",
                 AccessToken = token
             });
         }
 
-        public async Task<T> UpdateCartAsnyc<T>(CartDto cartDto, string token = null)
+        public async Task<T> UpdateCartAsync<T>(CartDto cartDto, string token = null)
         {
             return await this.SendAsync<T>(new ApiRequest()
             {
