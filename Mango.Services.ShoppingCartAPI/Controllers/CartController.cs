@@ -11,47 +11,41 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
     public class CartController : Controller
     {
         private readonly ICartRepository _cartRepository;
-        protected  ResponseDto _responseDto;
+        protected  ResponseDto _response;
         public  CartController(ICartRepository cartRepository)
         {
             _cartRepository = cartRepository;
-            _responseDto = new ResponseDto();
+            _response = new ResponseDto();
         }
         [HttpGet("GetCart/{userId}")]
         public async Task<object> GetCart(string userId)
         {
             try
             {
-                CartDto cartDto =await _cartRepository.GetCartByUserId(userId);
-                _responseDto.Result = cartDto;
+                CartDto cartDto = await _cartRepository.GetCartByUserId(userId);
+                _response.Result = cartDto;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _responseDto.IsSuccess = false;
-                _responseDto.ErrorMessages = new List<string>()
-                {
-                    e.ToString()
-                };
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
             }
-            return _responseDto;
+            return _response;
         }
         [HttpPost("AddCart")]
         public async Task<object> AddCart(CartDto cartDto)
         {
             try
             {
-                CartDto cartDt= await _cartRepository.CreateUpdateCart(cartDto);
-                _responseDto.Result = cartDt;
+                CartDto cartDt = await _cartRepository.CreateUpdateCart(cartDto);
+                _response.Result = cartDt;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _responseDto.IsSuccess = false;
-                _responseDto.ErrorMessages = new List<string>()
-                {
-                    e.ToString()
-                };
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
             }
-            return _responseDto;
+            return _response;
         }
 
         [HttpPost("UpdateCart")]
@@ -60,17 +54,17 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             try
             {
                 CartDto cartDt = await _cartRepository.CreateUpdateCart(cartDto);
-                _responseDto.Result = cartDt;
+                _response.Result = cartDt;
             }
             catch (Exception e)
             {
-                _responseDto.IsSuccess = false;
-                _responseDto.ErrorMessages = new List<string>()
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>()
                 {
                     e.ToString()
                 };
             }
-            return _responseDto;
+            return _response;
         }
         [HttpPost("RemoveCart")]
         public async Task<object> RemoveCart([FromBody]int  CartId)
@@ -78,17 +72,17 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             try
             {
                 bool  isSuccess = await _cartRepository.RemoveFromCart(CartId);
-                _responseDto.Result = isSuccess;
+                _response.Result = isSuccess;
             }
             catch (Exception e)
             {
-                _responseDto.IsSuccess = false;
-                _responseDto.ErrorMessages = new List<string>()
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>()
                 {
                     e.ToString()
                 };
             }
-            return _responseDto;
+            return _response;
         }
     }
 }
